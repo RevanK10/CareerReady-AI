@@ -1,0 +1,53 @@
+# Production-style stack: web + worker + webhook + Postgres.
+#   cp .env.example .env && cp .streamlit/secrets.toml.example .streamlit/secrets.toml   (fill both in)
+#   docker compose up --build            scale agents with:  docker compose up --scale worker=3
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: careerready
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: careerready
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U careerready"]
+      interval: 5s
+      retries: 10
+
+  web:
+    build: .
+    env_file: .env
+    environment:
+      AUTH_MODE: oidc
+      EMBEDDED_WORKER: "0"
+      DATABASE_URL: postgresql+psycopg://careerready:${POSTGRES_PASSWORD}@db/careerready
+    volumes: ["./.streamlit/secrets.toml:/app/.streamlit/secrets.toml:ro"]
+    ports: ["8501:8501"]
+    depends_on: {db: {condition: service_healthy}}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8501/_stcore/health')"]
+      interval: 15s
+
+  worker:                       # runs the agents and the browser; add replicas for throughput
+    build: .
+    command: ["python", "-m", "src.worker"]
+    env_file: .env
+    environment:
+      AUTH_MODE: oidc
+      DATABASE_URL: postgresql+psycopg://careerready:${POSTGRES_PASSWORD}@db/careerready
+    depends_on: {db: {condition: service_healthy}}
+    restart: unless-stopped
+
+  webhook:                      # Stripe calls POST /stripe/webhook here; put it behind HTTPS
+    build: .
+    command: ["uvicorn", "src.webhook:app", "--host", "0.0.0.0", "--port", "8502"]
+    env_file: .env
+    environment:
+      AUTH_MODE: oidc
+      DATABASE_URL: postgresql+psycopg://careerready:${POSTGRES_PASSWORD}@db/careerready
+    ports: ["8502:8502"]
+    depends_on: {db: {condition: service_healthy}}
+    restart: unless-stopped
+
+volumes:
+  pgdata:

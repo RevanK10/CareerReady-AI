@@ -1,0 +1,159 @@
+{
+  "model": "openrouter/free",
+  "n": 6,
+  "fit": {
+    "band_accuracy": 0.8333333333333334,
+    "spearman": 0.9561828874675149,
+    "mean_score_by_label": {
+      "strong": 82.5,
+      "medium": 42.5,
+      "weak": 20.0
+    },
+    "rows": [
+      {
+        "id": "strong-backend-1",
+        "label": "strong",
+        "score": 75,
+        "in_band": true
+      },
+      {
+        "id": "strong-data-1",
+        "label": "strong",
+        "score": 90,
+        "in_band": true
+      },
+      {
+        "id": "medium-1",
+        "label": "medium",
+        "score": 30,
+        "in_band": false
+      },
+      {
+        "id": "medium-2",
+        "label": "medium",
+        "score": 55,
+        "in_band": true
+      },
+      {
+        "id": "weak-1",
+        "label": "weak",
+        "score": 15,
+        "in_band": true
+      },
+      {
+        "id": "weak-2",
+        "label": "weak",
+        "score": 25,
+        "in_band": true
+      }
+    ]
+  },
+  "resume": {
+    "clean_rate": 0.0,
+    "rows": [
+      {
+        "id": "strong-backend-1",
+        "flagged": [
+          "123",
+          "4567",
+          "555",
+          "Deployed",
+          "PostgreSQL",
+          "Reduced"
+        ],
+        "clean": false
+      },
+      {
+        "id": "strong-data-1",
+        "flagged": [
+          "AWS",
+          "Adding",
+          "Applied",
+          "Conducted",
+          "Consolidated",
+          "Corporation",
+          "Dashboarding",
+          "Developed",
+          "Experiment",
+          "Kept",
+          "Master",
+          "Moved",
+          "Portfolio",
+          "Project",
+          "Science",
+          "Specific",
+          "Stats",
+          "The",
+          "While"
+        ],
+        "clean": false
+      },
+      {
+        "id": "medium-1",
+        "flagged": [
+          "Safety"
+        ],
+        "clean": false
+      },
+      {
+        "id": "medium-2",
+        "flagged": [
+          "1",
+          "123",
+          "2",
+          "200+",
+          "2022",
+          "4567",
+          "555",
+          "95%",
+          "Administered",
+          "Administration",
+          "Automated",
+          "Collaborated",
+          "DevOps",
+          "Documented",
+          "Engineer",
+          "Junior",
+          "LinkedIn",
+          "Linux",
+          "Resolved",
+          "SLA",
+          "Seeking",
+          "Systems",
+          "Tier",
+          "Windows"
+        ],
+        "clean": false
+      },
+      {
+        "id": "weak-1",
+        "flagged": [
+          "5+",
+          "Candidate",
+          "Condensed",
+          "Engineer",
+          "GitHub",
+          "Kaggle",
+          "Learning",
+          "Machine",
+          "Managed",
+          "Obtained",
+          "PhD",
+          "PyTorch",
+          "Removed",
+          "Scheduled"
+        ],
+        "clean": false
+      },
+      {
+        "id": "weak-2",
+        "flagged": [
+          "Designed",
+          "Executed",
+          "Maintained"
+        ],
+        "clean": false
+      }
+    ]
+  }
+}
